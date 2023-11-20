@@ -5,6 +5,7 @@ const { Server } = require('socket.io');
 
 const { userInfo } = require('os');
 const ACTIONS = require('./Actions');
+const path = require('path');
 
 const server = http.createServer(app);
 const io = new Server(server);
@@ -58,6 +59,11 @@ io.on('connection', (socket) => {
     delete userSocketMap[socket.id];
     socket.leave();
   });
+});
+
+app.use(express.static(path.join(__dirname, '.', 'public')));
+app.get('/*', (req, res) => {
+  res.sendFile(path.join(__dirname, '.', 'public', 'index.html'));
 });
 
 server.listen(port, () => {
